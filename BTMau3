@@ -1,0 +1,78 @@
+//file form
+from ._anvil_designer import Form1Template
+from anvil import *
+import anvil.server
+
+class Form1(Form1Template):
+  def __init__(self, **properties):
+    # Set Form properties and Data Bindings.
+    self.init_components(**properties)
+  def display_steps(self, steps):
+   
+    for i, step in enumerate(steps):
+      step_detail = ", ".join(map(str, step))
+      self.steps_textbox.text += f"Step {i+1}: {step_detail}\n"
+    # Any code you write here will run before the form opens.
+ 
+
+  def button_1_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    data = self.text_box_input.text.strip().split(',')  # Nhận dữ liệu từ TextBox và tách thành list
+    try:
+        # Gọi hàm server để sắp xếp mảng
+        sorted_data = anvil.server.call('bubble_Sort_acs', data)
+        # Hiển thị kết quả trên TextBox
+        self.text_box_output.text = ','.join(sorted_data)
+       
+    except ValueError:
+        alert("Vui lòng nhập các số nguyên cách nhau bằng dấu phẩy.")
+
+  def button_2_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    data = self.text_box_input.text.strip().split(',')  # Nhận dữ liệu từ TextBox và tách thành list
+    try:
+        # Gọi hàm server để sắp xếp mảng
+        sorted_data = anvil.server.call('bubble_Sort_desc', data)
+        # Hiển thị kết quả trên TextBox
+        self.text_box_output.text = ','.join(sorted_data)
+    except ValueError:
+        alert("Vui lòng nhập các số nguyên cách nhau bằng dấu phẩy.")
+
+  def button_1(self, **event_args):
+    """This method is called when the button is clicked"""
+    pass
+
+//file server
+import anvil.server
+
+# This is a server module. It runs on the Anvil server,
+# rather than in the user's browser.
+#
+# To allow anvil.server.call() to call functions here, we mark
+# them with @anvil.server.callable.
+# Here is an example - you can replace it with your own:
+#
+# @anvil.server.callable
+# def say_hello(name):
+#   print("Hello, " + name + "!")
+#   return 42
+#
+
+@anvil.server.callable
+def bubble_Sort_acs(arr):
+       arr = [int(x) for x in arr]  
+       n = len(arr)
+       for i in range(n):
+        for j in range(0, n-i-1):
+          if arr[j] > arr[j+1]:
+             arr[j], arr[j+1] = arr[j+1], arr[j]
+       return [str(x) for x in arr]
+@anvil.server.callable
+def bubble_Sort_desc(arr):
+       arr = [int(x) for x in arr]  # Chuyển đổi thành list số nguyên
+       n = len(arr)
+       for i in range(n):
+        for j in range(0, n-i-1):
+          if arr[j] < arr[j+1]:
+             arr[j], arr[j+1] = arr[j+1], arr[j]
+       return [str(x) for x in arr]  # Chuyển đổi lại thành list chuỗi
