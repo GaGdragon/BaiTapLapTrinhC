@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <math.h>
+
+// Hàm kiểm tra xem một số có phải là số chính phương hay không
+int laSoChinhPhuong(int n) {
+    int sqrtN = sqrt(n);
+    return (sqrtN * sqrtN == n);
+}
+
+// Hàm đếm và in ra các số chính phương nhỏ hơn n
+void demVaInSoChinhPhuong(int n) {
+    printf("Cac so chinh phuong nho hon %d la:\n", n);
+    int count = 0;
+    for (int i = 1; i < n; i++) {
+        if (laSoChinhPhuong(i)) {
+            printf("%d ", i);
+            count++;
+        }
+    }
+    printf("\nTong so chinh phuong la: %d\n", count);
+}
+
+int main() {
+    int n = 50;
+
+    demVaInSoChinhPhuong(n);
+
+    return 0;
+}
